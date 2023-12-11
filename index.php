@@ -39,7 +39,6 @@ if ($pageName == "home") {
         $categoryRoom=$_REQUEST["category_room"];
         $Adulte=$_REQUEST["Adulte"];
         $childern=$_REQUEST["childern"];
-        $photo=@$_REQUEST["myphoto"];
 
         $content ="
         checkin: $checkin
@@ -57,30 +56,26 @@ if ($pageName == "home") {
         $response = file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?" . http_build_query($data) );
 
 
-        $photoPath="https://th.bing.com/th/id/OIP.RCQKKpVddjGSwKaIweemrwHaE8?rs=1&pid=ImgDetMain";
-        // Load the image file
-        $photodata = [
-                'chat_id' => '@abraj_booking', //to be private replace @TR_A to -1002125885464
-                'photo' => $photoPath 
-            ];
-        $response = file_get_contents("https://api.telegram.org/bot$apiToken/sendPhoto?" . http_build_query($photodata) );
-            // // Do what you want with result
-            
-            
-            
-            
-            // $photoData = [
-            //     'chat_id' => '@TR17_A', // Replace with your desired chat ID
-            //     'photo' => new CURLFile($photoPath)
-            // ];
-        // Send the photo
-        // $ch = curl_init();
-        // curl_setopt($ch, CURLOPT_URL, "https://api.telegram.org/bot$apiToken/sendPhoto");
-        // curl_setopt($ch, CURLOPT_POST, true);
-        // curl_setopt($ch, CURLOPT_POSTFIELDS, $photoData);
-        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        // $response = curl_exec($ch);
-        // curl_close($ch);
+        $localPhotoPath= "./private/".$_FILES["myphoto"]["name"]; 
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, "https://api.telegram.org/bot$apiToken/sendPhoto");
+
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $postFields = [
+            'chat_id' => '@abraj_booking',
+            'photo' => new CURLFile(realpath($localPhotoPath)),
+        ];
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+
+        $response = curl_exec($ch);
+
+        curl_close($ch);
+
+
     }
 
 
