@@ -20,7 +20,7 @@ if(isset($_POST["submit"])){
             'text' => $content 
         ];
         $response = file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?" . http_build_query($data) );
-        // Do what you want with result
+        // Do what you want with result.
     }
     echo @$content;
 ?>
